@@ -1,25 +1,40 @@
 class cannonball{
-     constructor(x,y){
-       this.x = x   
-       this.y = y
-       this.r = 30
+     constructor(x,y){   
+       this.speed = 0.05
+       this.r = 40
+       this.trajetoria = []
        var config = {
         isStatic:true
       }
       this.bola = Bodies.circle(x,y,this.r,config);
        this.Image = loadImage ("assets/cannonball.png");
+       this.animation = [this.Image]
        World.add (world,this.bola);     
       }
     display(){
+      var troca = floor(this.speed % this.animation.length);
+      console.log (troca)
       push()
       imageMode (CENTER)
-      image (this.Image,this.bola.position.x,this.bola.position.y,this.r,this.r);  
+      image (this.animation[troca],0,0,this.r,this.r);  
       pop()  
-  
-    }
+        if (this.bola.velocity.x>0){
+          var trail = [this.bola.position.x,this.bola.position.y]
+          this.trajetoria.push(trail);
+        }
+        for (var i=0; i< this.trajetoria.length; i++ ){
+          image (this.Image,this.trajetoria [i][0],this.trajetoria [i][1],15,15);
+        }
+      }
+
     remove(indice){
-      Matter.World.remove(world,matriz[indice].body);
-      delete matriz[indice];
+      Matter.Body.setVelocity(this.bola, { x: 0, y: 0 });
+      this.animation = matrizSplash
+      this.speed = 0.05
+      this.r = 40
+      setTimeout(() => {
+      Matter.World.remove(world,this.bola);
+      delete matriz[indice],2000})
      }   
     atirar(){
       var angulo = canonbase.a-28
@@ -30,7 +45,10 @@ class cannonball{
       Matter.Body.setStatic(this.bola,false)
       
     }
+  
+    animate (){
+      this.speed += 0.05
 
-
+     }  
 }
   
